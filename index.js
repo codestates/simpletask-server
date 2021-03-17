@@ -1,11 +1,24 @@
 const express = require('express')
+const morgan =require('morgan')
+const session = require('express-session')
+const cors = require('cors')
+const fs = require('fs')
+const http = require('http')
+const https = require('https')
 
 const app = express();
 
-app.use('/', (req, res) => {
-    res.send("hello world node server")
-})
+app.use(morgan('dev'))
 
-app.listen(5000, () => {
+const options = {
+    ca: fs.readFileSync('/etc/letsencrypt/live/simpletask.ga/fullchain.pem'),
+    key: fs.readFileSync('/etc/letsencrypt/live/simpletask.ga/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/simpletask.ga/cert.pem')
+}
+
+http.createServer(app).listen(5000, () => {
     console.log('server on 5000')
+})
+https.createServer(options, app).listen(8000, () => {
+    console.log('server on 8000')
 })
