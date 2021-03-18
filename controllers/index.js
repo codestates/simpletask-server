@@ -84,6 +84,7 @@ module.exports = {
         // req.body.name === tokken.id
         contents.update({
             text: req.body.text
+            // 제목도 추가
         }, {
             where: {
                 id: req.body.id
@@ -144,9 +145,12 @@ module.exports = {
     },
 
     contentsController: async (req, res) => {
-        const content = contents.findAll({})
+        const content = await contents.findAll({})
         
-        res.status(200).json(content)
+        res.status(200).json({
+            data : content,
+            message : 'ok'
+        })
     },
 
     editpwController: async (req, res) => {
