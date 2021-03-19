@@ -2,6 +2,12 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('user_friends', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER
+      },
       userId: {
         type: Sequelize.INTEGER,
         references: { model: 'users', key: 'id' }
@@ -9,6 +15,14 @@ module.exports = {
       friendId: {
         type: Sequelize.INTEGER,
         references: { model: 'friendlists', key: 'id' }
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE
       }
     });
   },
