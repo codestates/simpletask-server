@@ -30,17 +30,23 @@ module.exports = {
     }]);
 
     await queryInterface.bulkInsert('friendlists', [{
-      name: 'testers'
+      name: 'testers',
+      createdAt: new Date(),
+      updatedAt: new Date()
     }]);
 
     await queryInterface.bulkInsert('user_friends', [{
       userId: '3',
-      friendId: '1'
+      friendId: '1',
+      createdAt: new Date(),
+      updatedAt: new Date()
     }])
 
     await queryInterface.bulkInsert('user_friends', [{
       userId: '2',
-      friendId: '1'
+      friendId: '1',
+      createdAt: new Date(),
+      updatedAt: new Date()
     }])
 
     await queryInterface.bulkInsert('contents', [{
