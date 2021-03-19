@@ -23,7 +23,7 @@ app.use(cookieParser())
 //}
 
 app.get('/contents', controller.contentsController)  // 컨텐츠 정보 얻기 / 필요 x / 컨텐츠 정보
-app.get('/user', controller.userController)  // 유저 정보 얻기 / 유저이름 / 유저의 정보, 친구가 있다면 친구(관심)
+app.post('/user', controller.userController)  // 유저 정보 얻기 / 이메일 / 유저의 정보, 친구가 있다면 친구(관심)
 app.post('/create', controller.createController)  // 컨텐츠 생성 / 타이틀, 텍스트, 유저아이디 / ok 메시지
 app.post('/signin', controller.signInController)  // 로그인 / 이메일, 패스워드 / ok 메시지
 app.post('/signout', controller.signOutController)  // 로그아웃 / 일단은 냅뒀지만 토큰 삭제
@@ -34,8 +34,8 @@ app.post('/delete', controller.deleteController)  // 글 삭제 / 게시글 id /
 app.post('/deleteid', controller.deleteidController)  // 아이디 삭제 / 이메일 / ok 메시지
 app.post('/addfriend', controller.addfriendController)  // 친구(관심) 추가 / 친구 이름 / ok 메시지
 
-// app.get("/accesstokenrequest", controller.accessTokenRequest);
-// app.get("/refreshtokenrequest", controller.refreshTokenRequest);
+app.get("/accesstokenrequest", controller.accessTokenRequest);
+app.get("/refreshtokenrequest", controller.refreshTokenRequest);
 
 http.createServer(app).listen(3000, () => {
     console.log('server on 3000')

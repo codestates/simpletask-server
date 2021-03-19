@@ -31,6 +31,13 @@ module.exports = {
 
     signOutController: async (req, res) => {
         // https가 된다면 작성
+        res.clearCookie('refreshToken', {
+            path: '/'
+        })
+        res.status(200).json({
+            data: '',
+            message: 'ok'
+        })
     },
 
     signUpController: async (req, res) => {
@@ -170,9 +177,10 @@ module.exports = {
     },
 
     userController: async (req, res) => {
+        // const userInfo = await user.findAll({})
         const userInfo = await user.findOne({
             where: {
-                name: req.body.name
+                email: req.body.email
             }
         })
 
@@ -236,67 +244,67 @@ module.exports = {
         }
     },
 
-    // accessTokenRequest: (res, req) => {
-    //     const authorization = req.headers['authorization'];
-    //     if(!authorization){
-    //         res.status(400).send({
-    //         data: null,
-    //         message: 'invalid access token'
-    //         })
-    //     } else {
-    //         const token = authorization.split(' ')[1];
-    //         let userdata = jwt.verify(token,process.env.ACCESS_SECRET)
-    //         let userInfo = {
-    //         id: userdata.id,
-    //         userId: userdata.userId,
-    //         email: userdata.email,
-    //         createdAt: userdata.createdAt,
-    //         updatedAt: userdata.updatedAt
-    //         }
+    accessTokenRequest: (res, req) => {
+        const authorization = req.headers['authorization'];
+        if(!authorization){
+            res.status(400).send({
+            data: null,
+            message: 'invalid access token'
+            })
+        } else {
+            const token = authorization.split(' ')[1];
+            let userdata = jwt.verify(token,process.env.ACCESS_SECRET)
+            let userInfo = {
+            id: userdata.id,
+            userId: userdata.userId,
+            email: userdata.email,
+            createdAt: userdata.createdAt,
+            updatedAt: userdata.updatedAt
+            }
 
-    //         res.status(200).send({
-    //         data :{userInfo : userInfo} ,
-    //         message : 'ok'
-    //         })        
-    //     }
-    // },
+            res.status(200).send({
+            data :{userInfo : userInfo} ,
+            message : 'ok'
+            })        
+        }
+    },
 
-    // refreshTokenRequest: (res,req) => {
-    //     let cookie = req.headers.cookie
+    refreshTokenRequest: (res,req) => {
+        let cookie = req.headers.cookie
 
-    //     if(!cookie) {   // cookie가 있는지
-    //         res.status(400).send({
-    //         data: null,
-    //         message: 'refresh token not provided'
-    //         })
-    //     } else {
-    //         const token = cookie.split('=')[1];
-    //         if(token === 'invalidtoken'){
-    //         res.status(400).send({
-    //             data: null,
-    //             message: 'invalid refresh token, please log in again'
-    //         })
-    //         } else {
-    //         let userdata = jwt.verify(token, process.env.REFRESH_SECRET)
-    //         let userInfo = {
-    //             id: userdata.id,
-    //             userId: userdata.userId,
-    //             email: userdata.email,
-    //             createdAt: userdata.createdAt,
-    //             updatedAt: userdata.updatedAt
-    //         }
-    //         let newToken = jwt.sign(userInfo,process.env.REFRESH_SECRET)
-    //         let accessToken = jwt.sign(userInfo,process.env.ACCESS_SECRET)
+        if(!cookie) {   // cookie가 있는지
+            res.status(400).send({
+            data: null,
+            message: 'refresh token not provided'
+            })
+        } else {
+            const token = cookie.split('=')[1];
+            if(token === 'invalidtoken'){
+            res.status(400).send({
+                data: null,
+                message: 'invalid refresh token, please log in again'
+            })
+            } else {
+            let userdata = jwt.verify(token, process.env.REFRESH_SECRET)
+            let userInfo = {
+                id: userdata.id,
+                userId: userdata.userId,
+                email: userdata.email,
+                createdAt: userdata.createdAt,
+                updatedAt: userdata.updatedAt
+            }
+            let newToken = jwt.sign(userInfo,process.env.REFRESH_SECRET)
+            let accessToken = jwt.sign(userInfo,process.env.ACCESS_SECRET)
 
-    //         res.cookie('newToken', newToken )
-    //         res.status(200).send({
-    //             data: {
-    //             userInfo :userInfo,
-    //             accessToken : accessToken 
-    //             }, 
-    //             message : 'ok'}
-    //             )
-    //         }
-    //     }
-    // }
+            res.cookie('newToken', newToken )
+            res.status(200).send({
+                data: {
+                userInfo :userInfo,
+                accessToken : accessToken 
+                }, 
+                message : 'ok'}
+                )
+            }
+        }
+    }
 }
