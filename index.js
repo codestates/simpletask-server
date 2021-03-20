@@ -8,10 +8,13 @@ const http = require('http')
 const https = require('https')
 const controller = require("./controllers");
 const cookieParser = require("cookie-parser");
+const handleCallback = require('./controllers/callback')  // Oauth 리디렉션시 사용될 콜백
 
 const app = express();
 
-app.use(cors({}))
+app.use(cors({
+ origin: true
+}))
 app.use(morgan('dev'))
 app.use(bodyParser.json())
 app.use(cookieParser())
@@ -37,8 +40,10 @@ app.post('/addfriend', controller.addfriendController)  // 친구(관심) 추가
 app.get("/accesstokenrequest", controller.accessTokenRequest);
 app.get("/refreshtokenrequest", controller.refreshTokenRequest);
 
-http.createServer(app).listen(3000, () => {
-    console.log('server on 3000')
+
+app.post("/callback", handleCallback) // git Oauth 인증, 토큰 발행 
+http.createServer(app).listen(8080, () => {
+    console.log('server on 8000')
 })
 //https.createServer(options, app).listen(8000, () => {
 //    console.log('server on 8000')
@@ -47,3 +52,6 @@ http.createServer(app).listen(3000, () => {
 app.get('/', function(req,res){
     res.header("Access-Control-Allow-Origin", "*")
     res.send('hellow world')})
+
+
+
