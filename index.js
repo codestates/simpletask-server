@@ -12,9 +12,7 @@ const handleCallback = require('./controllers/callback')  // Oauth 리디렉션�
 
 const app = express();
 
-app.use(cors({
- origin: true
-}))
+app.use(cors({}))
 app.use(morgan('dev'))
 app.use(bodyParser.json())
 app.use(cookieParser())

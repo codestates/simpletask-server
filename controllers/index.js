@@ -191,7 +191,7 @@ module.exports = {
         })
 
         let number = []
-        let test = []
+        let test = ''
 
         if(link){
             for(let i = 0; i < link.length; i++){
@@ -207,7 +207,13 @@ module.exports = {
                         id: number[j]
                     }
                 })
-                test.push(friend.dataValues.name)
+                if(test === ''){
+                    test = friend.dataValues.name
+                } else {
+                    test = test + `, ${friend.dataValues.name}`
+                }
+                
+                // test.push(friend.dataValues.name)
             }
         }
 
@@ -216,7 +222,7 @@ module.exports = {
         }
         
         res.status(200).json({
-            date : userInfo,
+            data : userInfo,
             message : "ok"
         })
     },
