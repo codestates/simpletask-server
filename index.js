@@ -12,9 +12,7 @@ const handleCallback = require('./controllers/callback')  // Oauth 리디렉션�
 
 const app = express();
 
-app.use(cors({
- origin: true
-}))
+app.use(cors({}))
 app.use(morgan('dev'))
 app.use(bodyParser.json())
 app.use(cookieParser())
@@ -43,7 +41,7 @@ app.get("/refreshtokenrequest", controller.refreshTokenRequest);
 
 app.post("/callback", handleCallback) // git Oauth 인증, 토큰 발행 
 http.createServer(app).listen(8080, () => {
-    console.log('server on 8000')
+    console.log('server on 8080')
 })
 //https.createServer(options, app).listen(8000, () => {
 //    console.log('server on 8000')
