@@ -41,17 +41,19 @@ app.get("/accesstokenrequest", controller.accessTokenRequest);
 app.get("/refreshtokenrequest", controller.refreshTokenRequest);
 
 
+
 app.post("/callback", handleCallback) // git Oauth 인증, 토큰 발행 
 http.createServer(app).listen(8080, () => {
-    console.log('server on 8000')
+    console.log('server on 8080')
 })
 //https.createServer(options, app).listen(8000, () => {
 //    console.log('server on 8000')
 //})
 
-app.get('/', function(req,res){
+app.get('/', function(req, res){
     res.header("Access-Control-Allow-Origin", "*")
-    res.send('hellow world')})
+    res.send('hellow world')}
+)
 
 
 
