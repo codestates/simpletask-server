@@ -18,12 +18,12 @@ module.exports = {
             })
         } else {
             // delete userInfo.dataValues.password
-            // const accessToken = jwt.sign(userInfo.dataValues,process.env.ACCESS_SECRET,{expiresIn : '1m'})
+            const accessToken = jwt.sign(userInfo.dataValues,process.env.ACCESS_SECRET,{expiresIn : '1h'})
             // const refreshToken = jwt.sign(userInfo.dataValues,process.env.REFRESH_SECRET,{expiresIn : '2m'})
             // res.cookie('refreshToken', refreshToken)
 
             res.status(200).json({
-                data: '',
+                data: accessToken,
                 message : 'ok'
             })
         }
@@ -227,90 +227,98 @@ module.exports = {
         })
     },
 
-    addfriendController: async(res, req) => {
+    addfriendController: async(req, res) => {
         const isreal = await friendlist.findOne({
             where: {
-                name: res.body.name
+                name: req.body.friendId
             }
         })
+        const userId = await user.findOne({
+            where: {
+                name: req.body.name
+            }
+        })
+        console.log(isreal)
+        console.log(userId)
         if(!isreal){
-            req.status(404).json({
+            res.status(404).json({
                 data : '',
                 message : 'fail'
             })
         } else {
-            user_friend.create({
-                userId: res.body.id,
-                friendId: isreal.dataValues.id
+            const pair = await user_friend.findOne({
+                where: {
+                    userId: userId.dataValues.id,
+                    friendId: isreal.dataValues.id   
+                }
             })
-            req.status(200).json({
-                data : '',
-                message : 'ok'
+            if (pair) {} else
+             {
+                user_friend.create({
+                    userId: userId.dataValues.id,
+                    friendId: isreal.dataValues.id
+                })
+                res.status(200).json({
+                    data : '',
+                    message : 'ok'
+                })
+            }
+        }
+    },
+
+    accessTokenRequest: (req, res) => {
+        if(req.body.accessToken){
+            const token = req.body.accessToken
+            const userdata = jwt.verify(token, process.env.ACCESS_SECRET)
+
+            res.status(200).json({
+                data: userdata,
+                message: "ok"
+            })
+        } else {
+            res.status(400).json({
+                data: '',
+                message: 'ok'
             })
         }
     },
 
-    accessTokenRequest: (res, req) => {
-        const authorization = req.headers['authorization'];
-        if(!authorization){
-            res.status(400).send({
-            data: null,
-            message: 'invalid access token'
-            })
-        } else {
-            const token = authorization.split(' ')[1];
-            let userdata = jwt.verify(token,process.env.ACCESS_SECRET)
-            let userInfo = {
-            id: userdata.id,
-            userId: userdata.userId,
-            email: userdata.email,
-            createdAt: userdata.createdAt,
-            updatedAt: userdata.updatedAt
-            }
+    // refreshTokenRequest: (res,req) => {
+    //     let cookie = req.headers.cookie
 
-            res.status(200).send({
-            data :{userInfo : userInfo} ,
-            message : 'ok'
-            })        
-        }
-    },
+    //     if(!cookie) {   // cookie가 있는지
+    //         res.status(400).send({
+    //         data: null,
+    //         message: 'refresh token not provided'
+    //         })
+    //     } else {
+    //         const token = cookie.split('=')[1];
+    //         if(token === 'invalidtoken'){
+    //         res.status(400).send({
+    //             data: null,
+    //             message: 'invalid refresh token, please log in again'
+    //         })
+    //         } else {
+    //         let userdata = jwt.verify(token, process.env.REFRESH_SECRET)
+    //         let userInfo = {
+    //             id: userdata.id,
+    //             userId: userdata.userId,
+    //             email: userdata.email,
+    //             createdAt: userdata.createdAt,
+    //             updatedAt: userdata.updatedAt
+    //         }
+    //         let newToken = jwt.sign(userInfo,process.env.REFRESH_SECRET)
+    //         let accessToken = jwt.sign(userInfo,process.env.ACCESS_SECRET)
 
-    refreshTokenRequest: (res,req) => {
-        let cookie = req.headers.cookie
-
-        if(!cookie) {   // cookie가 있는지
-            res.status(400).send({
-            data: null,
-            message: 'refresh token not provided'
-            })
-        } else {
-            const token = cookie.split('=')[1];
-            if(token === 'invalidtoken'){
-            res.status(400).send({
-                data: null,
-                message: 'invalid refresh token, please log in again'
-            })
-            } else {
-            let userdata = jwt.verify(token, process.env.REFRESH_SECRET)
-            let userInfo = {
-                id: userdata.id,
-                userId: userdata.userId,
-                email: userdata.email,
-                createdAt: userdata.createdAt,
-                updatedAt: userdata.updatedAt
-            }
-            let newToken = jwt.sign(userInfo,process.env.REFRESH_SECRET)
-            let accessToken = jwt.sign(userInfo,process.env.ACCESS_SECRET)
-
-            res.cookie('newToken', newToken )
-            res.status(200).send({
-                data: {
-                userInfo :userInfo,
-                accessToken : accessToken 
-                }, 
-                message : 'ok'}
-                )
-            }
-        }
-    }
+    //         res.cookie('newToken', newToken )
+    //         res.status(200).send({
+    //             data: {
+    //             userInfo :userInfo,
+    //             accessToken : accessToken 
+    //             }, 
+    //             message : 'ok'}
+    //             )
+    //         }
+    //     }
+    // }
 }

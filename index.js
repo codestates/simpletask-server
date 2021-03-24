@@ -35,8 +35,8 @@ app.post('/delete', controller.deleteController)  // 글 삭제 / 게시글 id /
 app.post('/deleteid', controller.deleteidController)  // 아이디 삭제 / 이메일 / ok 메시지
 app.post('/addfriend', controller.addfriendController)  // 친구(관심) 추가 / 친구 이름 / ok 메시지
 
-app.get("/accesstokenrequest", controller.accessTokenRequest);
-app.get("/refreshtokenrequest", controller.refreshTokenRequest);
+app.post("/accesstokenrequest", controller.accessTokenRequest);
+// app.get("/refreshtokenrequest", controller.refreshTokenRequest);
 
 
 app.post("/callback", handleCallback) // git Oauth 인증, 토큰 발행 

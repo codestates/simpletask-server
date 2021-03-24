@@ -4,7 +4,7 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.bulkInsert('users', [{
       name: 'tester1',
-      email: 'test@test.com',
+      email: 'test1@test.com',
       password: '1234',
       nickname: 'test',
       createdAt: new Date(),
@@ -13,7 +13,7 @@ module.exports = {
 
     await queryInterface.bulkInsert('users', [{
       name: 'tester2',
-      email: 'test@test.com',
+      email: 'test2@test.com',
       password: '1234',
       nickname: 'test',
       createdAt: new Date(),
@@ -22,7 +22,7 @@ module.exports = {
 
     await queryInterface.bulkInsert('users', [{
       name: 'tester3',
-      email: 'test@test.com',
+      email: 'test3@test.com',
       password: '1234',
       nickname: 'test',
       createdAt: new Date(),
@@ -30,7 +30,19 @@ module.exports = {
     }]);
 
     await queryInterface.bulkInsert('friendlists', [{
-      name: 'testers',
+      name: 'tester1',
+      createdAt: new Date(),
+      updatedAt: new Date()
+    }]);
+
+    await queryInterface.bulkInsert('friendlists', [{
+      name: 'tester2',
+      createdAt: new Date(),
+      updatedAt: new Date()
+    }]);
+
+    await queryInterface.bulkInsert('friendlists', [{
+      name: 'tester3',
       createdAt: new Date(),
       updatedAt: new Date()
     }]);
